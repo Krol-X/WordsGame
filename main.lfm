@@ -1,0 +1,102 @@
+object MainForm: TMainForm
+  Left = 405
+  Height = 320
+  Top = 220
+  Width = 480
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Игра в слова!'
+  ClientHeight = 320
+  ClientWidth = 480
+  OnClose = FormClose
+  LCLVersion = '2.0.8.0'
+  object Button1: TButton
+    Left = 8
+    Height = 25
+    Top = 32
+    Width = 67
+    Caption = 'Ответить'
+    OnClick = Button1Click
+    TabOrder = 2
+  end
+  object Button2: TButton
+    Left = 80
+    Height = 25
+    Top = 32
+    Width = 112
+    Caption = 'Показать словарь'
+    OnClick = Button2Click
+    TabOrder = 3
+  end
+  object Edit1: TEdit
+    Left = 88
+    Height = 23
+    Top = 8
+    Width = 176
+    OnKeyPress = Edit1KeyPress
+    ParentShowHint = False
+    TabOrder = 1
+  end
+  object Label1: TLabel
+    Left = 8
+    Height = 15
+    Top = 12
+    Width = 69
+    Caption = 'Ваше слово:'
+    ParentColor = False
+  end
+  object Memo1: TMemo
+    Left = 8
+    Height = 212
+    Top = 80
+    Width = 256
+    Lines.Strings = (
+      'Правила:'
+      'Вы должны придумать слово,'
+      'которое начинаеться на ту самую букву,'
+      'на которую заканчивалось предыдущее'
+      'слово. Если слово заканчиваеться на "ы",'
+      '"ь" или "ъ", то следующее слово следует'
+      'придумывать с предыдущей буквы.'
+      ''
+      'Данная программа содержит полный'
+      'словарь существительных русского языка!'
+      ''
+      'Словарь содержит около 900 страниц'
+    )
+    ReadOnly = True
+    TabOrder = 0
+    TabStop = False
+  end
+  object Button3: TButton
+    Left = 197
+    Height = 25
+    Top = 32
+    Width = 67
+    Caption = 'Сдаться'
+    OnClick = Button3Click
+    TabOrder = 4
+  end
+  object ListBox1: TListBox
+    Left = 272
+    Height = 284
+    Hint = 'Двойной щелчок скопирует слово в поле ввода'
+    Top = 8
+    Width = 204
+    DoubleBuffered = False
+    ItemHeight = 0
+    OnDblClick = ListBox1DblClick
+    OnKeyPress = ListBox1KeyPress
+    ParentDoubleBuffered = False
+    ParentShowHint = False
+    ShowHint = True
+    TabOrder = 5
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 297
+    Width = 480
+    Panels = <>
+  end
+end

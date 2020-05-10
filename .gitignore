@@ -1,0 +1,8 @@
+# Folders
+backup
+lib
+
+# Files
+*.exe
+*.res
+*.lps
