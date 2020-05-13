@@ -7,11 +7,17 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, ComCtrls, RegExpr;
 
+type
+  TCharSrchInfo = record
+    start, count: integer;
+  end;
+
 var
   _data: TStringList;  // Словарь
   _game: TStringList;  // Текущая игра
   _gameS: TStringList; // Сортированный список для поиска
   _show: boolean;      // Показываем ли мы словарь?
+  _chInfo: array [128..191] of TCharSrchInfo;
 
 function isWord(s: string): boolean;
 
@@ -25,7 +31,7 @@ function isWord(s: string): boolean;
 begin
   with TRegExpr.Create do
     try
-      Expression := '[а-я]';
+      Expression := '[а-я]+';
       Result := Exec(s);
     finally
       Free;
@@ -42,6 +48,7 @@ end;
 
 procedure LoadData(mask: string; splash: TForm);
 var sr: TSearchRec; dir, tmp: TStringList; i: integer;
+  s: AnsiString;
 begin
   dir := TStringList.Create;
   tmp := TStringList.Create;
@@ -63,6 +70,14 @@ begin
 
   dir.Destroy;
   tmp.Destroy;
+
+  for i:=1 to _data.Count do
+    with _chInfo[ord(_data[i-1][2])] do
+    begin
+      if count = 0 then
+        start := i;
+      inc(count);
+    end;
 end;
 
 procedure Done;

@@ -63,10 +63,10 @@ begin
   if i = 0 then
     Result := #0
   else
-  if pos(s[i], 'ьыъ') <> 0 then
+  if pos(s[i], #138#139#140) <> 0 then
     Result := s[i-2]
   else
-    Result := s[i-1];
+    Result := s[i];
 end;
 
 procedure TMainForm.Button1Click(Sender: TObject);
@@ -89,7 +89,7 @@ begin
   else
     begin
       ss := _game[num-1];
-      if LastLetter(ss) <> s[1] then
+      if LastLetter(ss) <> s[2] then
         StatusBar1.SimpleText := 'Слово начинается не на ту букву!'
       else
       if _gameS.Find(s, t) then
@@ -99,9 +99,17 @@ begin
           StatusBar1.SimpleText := '';
           ListBox1.Items.Insert(num, s);
           _game.Insert(num, s);
-          _gameS.Add(s)
+          _gameS.Add(s);
         end
     end;
+  if num <> _game.Count then
+    with _chInfo[ord(s[s.Length])] do
+      begin
+        s := _data[start+Random(count)];
+        ListBox1.Items.Insert(num+1, s);
+        _game.Insert(num+1, s);
+        _gameS.Add(s);
+      end;
 end;
 
 procedure TMainForm.Button2Click(Sender: TObject);
@@ -140,11 +148,6 @@ procedure TMainForm.ListBox1KeyPress(Sender: TObject; var Key: char);
 begin
   if Key = #13 then
     Edit1.Text := ListBox1.GetSelectedText;
-  Key := LowerCase(Key);
-  if ('а' <= Key) and (Key <= 'я') then
-  begin
-    // ...
-  end;
 end;
 
 end.
