@@ -86,8 +86,7 @@ begin
 end;
 
 procedure LoadData(name: string);
-var tmp: TStringList; i: integer;
-  s: AnsiString;
+var tmp: TStringList;
 begin
   tmp := TStringList.Create;
   tmp.LoadFromFile(name);
