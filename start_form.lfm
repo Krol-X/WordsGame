@@ -1,0 +1,59 @@
+object StartForm: TStartForm
+  Left = 531
+  Height = 64
+  Top = 242
+  Width = 240
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Игра в слова!'
+  ClientHeight = 64
+  ClientWidth = 240
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.0.8.0'
+  object ComboBox1: TComboBox
+    Left = 97
+    Height = 23
+    Top = 8
+    Width = 111
+    ItemHeight = 15
+    ParentShowHint = False
+    Style = csDropDownList
+    TabOrder = 0
+  end
+  object Label1: TLabel
+    Left = 8
+    Height = 15
+    Top = 13
+    Width = 80
+    Caption = 'Файл словаря:'
+    ParentColor = False
+  end
+  object Button1: TButton
+    Left = 8
+    Height = 25
+    Top = 32
+    Width = 224
+    Caption = 'Играть'
+    OnClick = Button1Click
+    TabOrder = 1
+  end
+  object Button2: TButton
+    Left = 208
+    Height = 24
+    Top = 7
+    Width = 24
+    Caption = 'P'
+    Font.CharSet = SYMBOL_CHARSET
+    Font.Color = clBlack
+    Font.Height = -15
+    Font.Name = 'Wingdings 3'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    OnClick = Button2Click
+    ParentFont = False
+    TabOrder = 2
+  end
+end

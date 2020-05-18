@@ -7,24 +7,23 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, main, splash, engine;
+  Forms, start_form, main_form, form_switcher;
 
 {$R *.res}
 
+var
+  MainForm: TMainForm;
+  StartForm: TStartForm;
+
 begin
   RequireDerivedFormResource:=True;
-  try
-    Application.Scaled:=True;
-    Application.Initialize;
-    SplashForm:=TSplashForm.Create(Application);
-    SplashForm.Show;
-    Application.CreateForm(TMainForm, MainForm);
-    MainForm.Init;
-    LoadData('*.dat', SplashForm);
-    SplashForm.Hide;
-  finally
-    SplashForm.Close;
-  end;
+  Application.Scaled:=True;
+  Application.Initialize;
+  Application.CreateForm(TStartForm, StartForm);
+  Application.CreateForm(TMainForm, MainForm);
+  FormSwitcher := TFormSwitcher.Create;
+  FormSwitcher.AddForm(StartForm, 'start');
+  FormSwitcher.AddForm(MainForm, 'main');
   Application.Run;
 end.
 

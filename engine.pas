@@ -13,17 +13,22 @@ type
   end;
 
 var
+  _files: TStringList; // Список найденых файлов-словарей
   _data: TStringList;  // Словарь
   _game: TStringList;  // Текущая игра
   _gameS: TStringList; // Сортированный список для поиска
   _show: boolean;      // Показываем ли мы словарь?
   _chInfo: array [128..191] of TCharSrchInfo;
+  _dbreload: boolean;  // Пересчитать список файлов-словарей?
 
 function isWord(s: string): boolean;
+function LastLetter(s: string): char;
 
 procedure Init;
-procedure LoadData(mask: string; splash: TForm);
 procedure Done;
+procedure LoadFileList(mask: string);
+procedure LoadData(name: string);
+procedure RecalcInfo;
 
 implementation
 
@@ -38,41 +43,65 @@ begin
     end;
 end;
 
-procedure Init;
+function LastLetter(s: string): char;
+var i: integer;
 begin
-  _data := TStringList.Create;
-  _game  := TStringList.Create;
-  _gameS := TStringList.Create;
-  _gameS.Sorted := True;
+  i := s.Length;
+  if i = 0 then
+    Result := #0
+  else
+  if pos(s[i], #138#139#140) <> 0 then
+    Result := s[i-2]
+  else
+    Result := s[i];
 end;
 
-procedure LoadData(mask: string; splash: TForm);
-var sr: TSearchRec; dir, tmp: TStringList; i: integer;
-  s: AnsiString;
+procedure Init;
 begin
-  dir := TStringList.Create;
-  tmp := TStringList.Create;
+  _files := TStringList.Create;
+  _data  := TStringList.Create; _data.Sorted := True;
+  _game  := TStringList.Create;
+  _gameS := TStringList.Create; _gameS.Sorted := True;
+  _dbreload := True;
+  Randomize;
+end;
 
+procedure Done;
+begin
+  _files.Destroy;
+  _data.Destroy;
+  _game.Destroy;
+  _gameS.Destroy
+end;
+
+procedure LoadFileList(mask: string);
+var sr: TSearchRec;
+begin
+  _files.Clear;
   If FindFirst(mask, faAnyFile, sr) = 0 then
     repeat
-      dir.Add(sr.Name);
+      _files.Add(sr.Name);
     until FindNext(sr) <> 0;
   FindClose(sr);
+end;
 
-  for i:=1 to dir.Count do
-  begin
-    splash.Caption := 'Игра в слова! Загрузка "' + dir[i-1] + '"...';
-    TProgressBar(splash.Controls[0]).Position := round(i/dir.Count*100);
-    tmp.LoadFromFile(dir[i-1]);
-    _data.AddStrings(tmp);
-  end;
-  _data.Sorted := True;
-
-  dir.Destroy;
+procedure LoadData(name: string);
+var tmp: TStringList; i: integer;
+  s: AnsiString;
+begin
+  tmp := TStringList.Create;
+  tmp.LoadFromFile(name);
+  _data.AddStrings(tmp);
   tmp.Destroy;
+end;
 
-  for i:=1 to _data.Count do
-    with _chInfo[ord(_data[i-1][2])] do
+procedure RecalcInfo;
+var i: integer;
+begin
+  FillChar(_chInfo, SizeOf(_chInfo), 0);
+  i := _data.Count;
+  for i:=0 to _data.Count-1 do
+    with _chInfo[ord(_data[i][2])] do
     begin
       if count = 0 then
         start := i;
@@ -80,12 +109,6 @@ begin
     end;
 end;
 
-procedure Done;
-begin
-  _data.Destroy;
-  _game.Destroy;
-  _gameS.Destroy
-end;
 
 end.
 

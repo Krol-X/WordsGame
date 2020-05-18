@@ -1,12 +1,13 @@
-unit Main;
+﻿unit main_form;
 
 {$mode objfpc}{$H+}
+{$define ___main_form}
 
 interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  ComCtrls, engine;
+  ComCtrls, engine, form_switcher;
 
 type
 
@@ -21,11 +22,11 @@ type
     ListBox1: TListBox;
     Memo1: TMemo;
     StatusBar1: TStatusBar;
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Edit1KeyPress(Sender: TObject; var Key: char);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure ListBox1DblClick(Sender: TObject);
     procedure ListBox1KeyPress(Sender: TObject; var Key: char);
   private
@@ -33,44 +34,52 @@ type
     procedure Init;
   end;
 
-var
-  MainForm: TMainForm;
+
 
 implementation
 
-{$R main.lfm}
+{$R main_form.lfm}
 
 { TMainForm }
 
 procedure TMainForm.Init;
 begin
-  engine.Init;
   ListBox1.Items := _game;
   StatusBar1.SimpleText := 'Загружено ' + IntToStr(_data.Count) + ' слов.';
 end;
 
-procedure TMainForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
-begin
-  engine.Done;
-end;
-
-
-
-function LastLetter(s: string): char;
-var i: integer;
-begin
-  i := s.Length;
-  if i = 0 then
-    Result := #0
-  else
-  if pos(s[i], #138#139#140) <> 0 then
-    Result := s[i-2]
-  else
-    Result := s[i];
-end;
-
 procedure TMainForm.Button1Click(Sender: TObject);
 var s, ss: string; num, t: integer;
+
+procedure addWord(info: TCharSrchInfo; n: integer);
+var i: integer;
+begin
+  i := 0;
+  with info do
+  repeat
+    s := _data[start+Random(count)];
+    inc(i);
+    if i = 10 then
+      begin
+        for i:=1 to info.count do
+        begin
+          s := _data[start+i-1];
+          if not _gameS.Find(s, t) then
+            break;
+        end;
+        if _gameS.Find(s, t) then
+        begin
+          StatusBar1.SimpleText := 'Вы победили 8|';
+          exit;
+        end;
+        break;
+      end;
+  until not _gameS.Find(s, t);
+  ListBox1.Items.Insert(n, s);
+  _game.Insert(n, s);
+  _gameS.Add(s);
+end;
+
 begin
   s := LowerCase(Edit1.Text).Trim;
   num := _game.Count;
@@ -103,13 +112,8 @@ begin
         end
     end;
   if num <> _game.Count then
-    with _chInfo[ord(s[s.Length])] do
-      begin
-        s := _data[start+Random(count)];
-        ListBox1.Items.Insert(num+1, s);
-        _game.Insert(num+1, s);
-        _gameS.Add(s);
-      end;
+    addWord(_chInfo[ord(LastLetter(s))], num+1);
+  ListBox1.ItemIndex := ListBox1.Items.Count-1;
 end;
 
 procedure TMainForm.Button2Click(Sender: TObject);
@@ -130,13 +134,18 @@ end;
 
 procedure TMainForm.Button3Click(Sender: TObject);
 begin
-  MainForm.Close;
+  FormSwitcher.SwitchTo(self, 'start');
 end;
 
 procedure TMainForm.Edit1KeyPress(Sender: TObject; var Key: char);
 begin
   if Key = #13 then
     Button1Click(Sender);
+end;
+
+procedure TMainForm.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  FormSwitcher.SwitchTo(self, 'start');
 end;
 
 procedure TMainForm.ListBox1DblClick(Sender: TObject);
@@ -151,4 +160,3 @@ begin
 end;
 
 end.
-
