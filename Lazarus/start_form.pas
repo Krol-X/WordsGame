@@ -1,4 +1,4 @@
-unit start_form;
+﻿unit start_form;
 
 {$mode objfpc}{$H+}
 {$define ___start_form}
@@ -14,9 +14,10 @@ type
   { TStartForm }
 
   TStartForm = class(TForm)
-    Button1: TButton;
-    ComboBox1: TComboBox;
     Label1: TLabel;
+    ComboBox1: TComboBox;
+    Button1: TButton;
+    Button2: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -28,7 +29,7 @@ type
 
 implementation
 
-{$R *.lfm}
+{$R start_form.lfm}
 
 { TStartForm }
 

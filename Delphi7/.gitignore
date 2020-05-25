@@ -1,0 +1,8 @@
+# Files
+*.exe
+*.bat
+*.res
+*.~*
+*.dcu
+*.ddp
+*.dof

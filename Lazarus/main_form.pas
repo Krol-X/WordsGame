@@ -14,13 +14,13 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    Label1: TLabel;
+    Edit1: TEdit;
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
-    Edit1: TEdit;
-    Label1: TLabel;
-    ListBox1: TListBox;
     Memo1: TMemo;
+    ListBox1: TListBox;
     StatusBar1: TStatusBar;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
